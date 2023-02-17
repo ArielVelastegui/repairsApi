@@ -1,4 +1,5 @@
 const Repair = require("../models/repairs.models")
+const catchAsync = require("../utils/catchAsync")
 
 exports.findAllRepairs = async (req, res) => {
   try {
@@ -20,8 +21,12 @@ exports.findAllRepairs = async (req, res) => {
       message: "Something went very wrong! 🧨",
     })
   }
- 
 }
+
+exports.nombreFuncion = catchAsync(async(req, res,next) => {
+
+})
+
 exports.findOneRepair = async (req, res) => {
   try {
     const { repair } = req
