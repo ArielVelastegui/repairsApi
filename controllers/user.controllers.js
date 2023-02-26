@@ -1,4 +1,6 @@
 const User = require("../models/users.model")
+const { generateJWT } = require("../utils/jwt")
+const bcrypt = require('bcryptjs');
 
 exports.findAllUsers = async (req, res) => {
   try {
@@ -42,12 +44,22 @@ exports.createUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body
 
+    name = name.toLowerCase()
+    email = email.toLowerCase()
+
     const user = await User.create({
       name,
       email,
       password,
       role,
     })
+    
+    const salt = bcrypt.genSaltSync(10)
+    user.password = bcrypt.hashSync(password, salt)
+
+    await user.save()
+
+    const token = await generateJWT(user.id)
 
     return res.status(201).json({
       status: "success",

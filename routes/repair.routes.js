@@ -7,18 +7,19 @@ const {
   deleteRepair,
 } = require('../controllers/repair.controller');
 const { validExistRepairs } = require('../middlewares/repairs.middleware');
+const { tokenValidation, restrictTo } = require('../middlewares/users.middleware');
 
 const router = Router();
 
-router.get('/', findAllRepairs);
+router.get('/',tokenValidation,restrictTo('employee'), findAllRepairs);
 
-router.get('/:id', validExistRepairs, findOneRepair);
+router.get('/:id',tokenValidation,restrictTo('employee'), validExistRepairs, findOneRepair);
 
-router.post('/', createRepair);
+router.post('/',tokenValidation, createRepair);
 
-router.patch('/:id', validExistRepairs, updateRepair);
+router.patch('/:id',tokenValidation,restrictTo('employee'), validExistRepairs, updateRepair);
 
-router.delete('/:id', validExistRepairs, deleteRepair);
+router.delete('/:id',tokenValidation,restrictTo('employee'), validExistRepairs, deleteRepair);
 
 module.exports = {
   repairRouter: router,

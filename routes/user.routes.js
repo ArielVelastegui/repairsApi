@@ -6,19 +6,19 @@ const {
   updateUser,
   deleteUser,
 } = require('../controllers/user.controllers');
-const { validExistUser } = require('../middlewares/users.middleware');
+const { validExistUser, tokenValidation, protectAccountOwner } = require('../middlewares/users.middleware');
 
 const router = Router();
 
-router.get('/', findAllUsers);
+router.get('/', tokenValidation, findAllUsers, );
 
-router.get('/:id',validExistUser, findOneUser);
+router.get('/:id', tokenValidation, validExistUser, findOneUser);
 
 router.post('/', createUser);
 
-router.patch('/:id',validExistUser, updateUser);
+router.patch('/:id', tokenValidation, protectAccountOwner, validExistUser, updateUser);
 
-router.delete('/:id',validExistUser, deleteUser);
+router.delete('/:id', tokenValidation,protectAccountOwner, validExistUser, deleteUser);
 
 module.exports = {
   userRouter: router,
